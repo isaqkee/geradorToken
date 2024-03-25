@@ -1,12 +1,20 @@
 import React from "react";
 import { Text, StyleSheet, Pressable, TouchableOpacity} from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard'
 
-export function CaixaToken({ token, removerToken }) {
+export function CaixaToken({ token, removerToken, copiarToken, }) {
+
+    async function copiarToken() {
+        await Clipboard.setStringAsync(token)
+        alert("Token copiado para área de transferência.")
+        fechar();
+    }
+
     return (
-        <Pressable style={ESTILOS.caixa} onLongPress={removerToken}>
+        <Pressable style={ESTILOS.caixa} onLongPress={copiarToken}>
             <Text style={ESTILOS.text}>{token}</Text>
-            <TouchableOpacity onPress={removerToken}>
+            <TouchableOpacity animationType="fade" onPress={() => {setTimeout(removerToken, 300)}}>
                 <Ionicons name="trash-outline" size={24} color="#fff" />
             </TouchableOpacity>
         </Pressable>
