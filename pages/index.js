@@ -3,13 +3,22 @@ import { ModalTokens } from '../components/modal';
 import Slider from "@react-native-community/slider";
 import { useState } from "react";
 
+let caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
 export function Home() {
     const [qtde, defineQtde] = useState(6);
     const [telaModal, configTelaModal]=useState(false);
+    const [tokenValue, configTokenValue] = useState("")
 
     function gerarToken() {
+        let token = ""
+        for (let i = 0, n = caracteres.length; i < qtde; i++) {
+            token += caracteres.charAt(Math.floor(Math.random() * n))
+        }
+        configTokenValue(token);
         configTelaModal(true);
         }
+        
     return (
         <View style={ESTILO.container}>
             <Image source={require("../assets/logo.png")} style={ESTILO.logo} />
@@ -34,7 +43,7 @@ export function Home() {
                 </Text>
             </TouchableOpacity>
             <Modal visible={telaModal} animationType="fade" transparent={true}>
-                <ModalTokens fechar={()=> configTelaModal(false)} />
+                <ModalTokens token={tokenValue} fechar={()=> configTelaModal(false)} />
             </Modal>
         </View>
 

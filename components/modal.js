@@ -1,24 +1,39 @@
 import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
+import * as Clipboard from 'expo-clipboard'
+import Armazenamento from '../hooks/bancoToken'
 
-export function ModalTokens({fechar}) {
+export function ModalTokens({ token, fechar }) {
+
+    const { salvarItem } = Armazenamento();
+
+    async function copiarToken() {
+        await Clipboard.setStringAsync(token)
+        alert("Token copiado para área de transferência.")
+        fechar();
+    }
+    async function salvarToken() {        
+        await salvarItem("@token", token)
+        alert(`Token ${token} salvo com sucesso`)
+        fechar();
+    }
     return (
-<View style={ESTILO.container}>
+        <View style={ESTILO.container}>
             <View style={ESTILO.content}>
                 <Text style={ESTILO.title}>
                     Senha Gerada
                 </Text>
-                <Pressable style={ESTILO.innerToken} >
-                    <Text style={ESTILO.text}>
-                        senha
+                <Pressable style={ESTILO.innerToken} onLongPress={copiarToken} >
+                    <Text style={ESTILO.text} selectable={false}>
+                        {token}
                     </Text>
                 </Pressable>
                 <View style={ESTILO.buttonArea}>
-                    <TouchableOpacity style={ESTILO.button} onPress={fechar}> 
+                    <TouchableOpacity style={ESTILO.button} onPress={fechar}>
                         <Text style={ESTILO.buttonText}>
                             Voltar
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[ESTILO.button, ESTILO.buttonSave]} >
+                    <TouchableOpacity style={[ESTILO.button, ESTILO.buttonSave]} onPress={salvarToken}>
                         <Text style={ESTILO.buttonSaveText}>
                             Salvar Senha
                         </Text>
@@ -74,13 +89,13 @@ const ESTILO = StyleSheet.create({
         alignItems: "center",
         marginBottom: 14,
         marginTop: 14,
-        margin:9,
+        margin: 9,
         padding: 8,
         backgroundColor: "#EEEEEE",
         borderRadius: 8,
     },
     buttonSave: {
-    
+
         backgroundColor: "#392DE9"
     },
     buttonSaveText: {
